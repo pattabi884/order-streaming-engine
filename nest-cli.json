@@ -1,0 +1,50 @@
+{
+  "$schema": "https://json.schemastore.org/nest-cli",
+  "collection": "@nestjs/schematics",
+  "sourceRoot": "apps/real-time-order-intelligence-platform/src",
+  "compilerOptions": {
+    "deleteOutDir": true,
+    "webpack": true,
+    "tsConfigPath": "apps/real-time-order-intelligence-platform/tsconfig.app.json"
+  },
+  "monorepo": true,
+  "root": "apps/real-time-order-intelligence-platform",
+  "projects": {
+    "kafka": {
+      "type": "library",
+      "root": "libs/kafka",
+      "entryFile": "index",
+      "sourceRoot": "libs/kafka/src",
+      "compilerOptions": {
+        "tsConfigPath": "libs/kafka/tsconfig.lib.json"
+      }
+    },
+    "real-time-order-intelligence-platform": {
+      "type": "application",
+      "root": "apps/real-time-order-intelligence-platform",
+      "entryFile": "main",
+      "sourceRoot": "apps/real-time-order-intelligence-platform/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/real-time-order-intelligence-platform/tsconfig.app.json"
+      }
+    },
+    "schemas": {
+      "type": "library",
+      "root": "libs/schemas",
+      "entryFile": "index",
+      "sourceRoot": "libs/schemas/src",
+      "compilerOptions": {
+        "tsConfigPath": "libs/schemas/tsconfig.lib.json"
+      }
+    },
+    "worker": {
+      "type": "application",
+      "root": "apps/worker",
+      "entryFile": "main",
+      "sourceRoot": "apps/worker/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/worker/tsconfig.app.json"
+      }
+    }
+  }
+}
