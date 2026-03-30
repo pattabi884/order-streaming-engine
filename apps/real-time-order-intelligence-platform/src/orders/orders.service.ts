@@ -10,7 +10,7 @@ export class OrdersService {
 
     async createOrder(dto: any) {
         const event = {
-            eventType: 'ORDER_CREATED',
+            eventType: 'CREATED',
             orderId: randomUUID(),
             merchantId: dto.merchantId,
             customerId: dto.customerId,

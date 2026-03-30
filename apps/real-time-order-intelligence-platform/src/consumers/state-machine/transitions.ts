@@ -1,0 +1,12 @@
+
+
+export const ALLOWED_TRANSITIONS: Record<string, string[]> = {
+    CREATED: ['CONFIRMED', 'CANCELLED'],
+    CONFIRMED: ['CANCELLED', 'AGENT_ASSIGNED', 'FAILED'],
+    AGENT_ASSIGNED: ['PICKED_UP', 'CANCELLED', 'FAILED'],
+    PICKED_UP:['IN_TRANSIT', 'FAILED'],
+    IN_TRANSIT: ['DELIVERED', 'FAILED'],
+    CANCELLED: [],
+    DELIVERED: [],
+    FAILED: [],
+}

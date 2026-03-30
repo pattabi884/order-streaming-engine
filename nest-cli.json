@@ -28,6 +28,15 @@
         "tsConfigPath": "apps/real-time-order-intelligence-platform/tsconfig.app.json"
       }
     },
+    "redis": {
+      "type": "library",
+      "root": "libs/redis",
+      "entryFile": "index",
+      "sourceRoot": "libs/redis/src",
+      "compilerOptions": {
+        "tsConfigPath": "libs/redis/tsconfig.lib.json"
+      }
+    },
     "schemas": {
       "type": "library",
       "root": "libs/schemas",
