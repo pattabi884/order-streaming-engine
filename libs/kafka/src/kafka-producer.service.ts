@@ -1,7 +1,6 @@
 import { Injectable, OnModuleInit, OnModuleDestroy, Inject } from '@nestjs/common';
 import { Kafka, Producer } from 'kafkajs';
 import { KafkaModule } from './kafka.module';
-import { MESSAGES } from '@nestjs/core/constants';
 
 //kafka producer service 
 
@@ -11,7 +10,6 @@ export class KafkaProducerService implements OnModuleInit, OnModuleDestroy {
 
     constructor( @Inject('KAFKA_INSTANCE') private readonly kafka: Kafka){}
 async onModuleInit() {
-    //const kafka = this.kafkaModule.getKakfaInstance();
     this.producer = this.kafka.producer();
 
     await this.producer.connect();

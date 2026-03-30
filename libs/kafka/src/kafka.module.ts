@@ -1,5 +1,4 @@
-import { Module, OnModuleInit } from '@nestjs/common';
-import { KafkaService } from './kafka.service';
+import { Inject, Module, OnModuleInit } from '@nestjs/common';
 import { Kafka } from 'kafkajs';
 import { KafkaProducerService } from './kafka-producer.service';
 
@@ -19,16 +18,8 @@ import { KafkaProducerService } from './kafka-producer.service';
   exports: ['KAFKA_INSTANCE', KafkaProducerService],
 })
 export class KafkaModule implements OnModuleInit {
-  private kafka: Kafka;
 
-  constructor() {
-    this.kafka = new Kafka({
-      clientId: 'orders-pipeline',
-      brokers: ['localhost:9092'],
-      connectionTimeout: 3000,    // ms to wait for connection
-      requestTimeout: 30000,
-    });
-  }
+  constructor(@Inject('KAFKA_INSTANCE') private readonly kafka: Kafka) {}
   async onModuleInit() {
     const admin = this.kafka.admin();
 
@@ -40,7 +31,7 @@ export class KafkaModule implements OnModuleInit {
         waitForLeaders: true,
         validateOnly: false,
         topics: [
-           { topic: 'order.lifecycle', numPartitions: 6, replicationFactor: 1 },
+          { topic: 'order.lifecycle', numPartitions: 6, replicationFactor: 1 },
           { topic: 'order.assignment', numPartitions: 3, replicationFactor: 1 },
           { topic: 'order.location', numPartitions: 12, replicationFactor: 1 },
           { topic: 'order.fulfillment', numPartitions: 3, replicationFactor: 1 },
@@ -58,7 +49,5 @@ export class KafkaModule implements OnModuleInit {
       console.log('kafak admin disconnected ')
     }
   }
-  getKakfaInstance() {
-    return this.kafka
-  }
+ 
 }

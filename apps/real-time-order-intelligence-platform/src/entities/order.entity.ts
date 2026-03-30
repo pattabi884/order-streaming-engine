@@ -7,7 +7,7 @@ import {
   CreateDateColumn,
   UpdateDateColumn,
 } from 'typeorm';
-import type { User } from './user.entity'; // ✅ type-only import (no runtime circular dependency)
+import { User } from './user.entity'; // ✅ type-only import (no runtime circular dependency)
 
 /**
  * ORDERS TABLE

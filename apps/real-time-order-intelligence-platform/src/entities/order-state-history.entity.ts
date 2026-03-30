@@ -6,7 +6,7 @@ import {
   JoinColumn,
   CreateDateColumn,
 } from 'typeorm';
-import type { Order } from './order.entity';
+import { Order } from './order.entity';
 
 @Entity('order_state_history')
 export class OrderStateHistory {
