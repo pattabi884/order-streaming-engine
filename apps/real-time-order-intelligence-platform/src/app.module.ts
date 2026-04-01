@@ -10,6 +10,7 @@ import { OrderStateHistory } from './entities/order-state-history.entity';
 import { User } from './entities/user.entity';
 import { Agent } from './entities/agent.entity';
 import { Merchant } from './entities/merchant.entity';
+import { AuthModule } from './auth/auth.module';
 
 //import { OrdersModule } from './modules/orders/orders.module';
 //import { StateMachineModule } from './modules/state-machine/state-machine.module';
@@ -32,6 +33,7 @@ import { Merchant } from './entities/merchant.entity';
     KafkaModule,
     OrdersModule,
     StateMachineModule,
+    AuthModule,
   ],
 })
 export class AppModule {}
