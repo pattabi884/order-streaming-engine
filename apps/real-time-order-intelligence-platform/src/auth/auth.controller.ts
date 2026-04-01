@@ -1,28 +1,29 @@
-import { Controller, Post, UseGuards, Req, Res, Body} from '@nestjs/common';
+import { Controller, Post, Get, UseGuards, Req, Body } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { LocalAuthGuard } from './guards/local-auth.guard';
+import { JwtAuthGuard } from './guards/jwt-auth.guard';
+import { CurrentUser } from './decorators/current-user.decorator';
 import type { RegisterInput } from './dto/register.dto';
-//import { LocalAuthGuard  } from './guards/local-auth.guard'
 
 @Controller('auth')
-    export class AuthController{
-    constructor(private readonly authService: AuthService){}
+export class AuthController {
+  constructor(private readonly authService: AuthService) {}
 
-    @Post('register')
-    async register(@Body() body: RegisterInput){
-        return this.authService.register(body);
-        
+  @Post('register')
+  async register(@Body() body: RegisterInput) {
+    return this.authService.register(body);
+  }
 
-    }
+  @Post('login')
+  @UseGuards(LocalAuthGuard)
+  async login(@Req() req: any) {
+    const user = req.user;
+    return this.authService.login(user);
+  } // <- this brace was missing in your file
 
-    @Post('login') 
-    @UseGuards(LocalAuthGuard)
-    //guard runs befoe method body to ensure if credentials fail method never runs 
-
-    async login(@Req() req: any){
-        const user = req.user;
-
-        return this.authService.login(user)
-
-    }
-    }
+  @Get('me')
+  @UseGuards(JwtAuthGuard)
+  me(@CurrentUser() user: any) {
+    return user;
+  }
+}
