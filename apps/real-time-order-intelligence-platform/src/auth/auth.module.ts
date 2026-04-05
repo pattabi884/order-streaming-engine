@@ -7,6 +7,8 @@ import { AuthService } from './auth.service';
 import { LocalStrategy } from './strategies/local.strategy';
 import { JwtStrategy } from './strategies/jwt.strategy';
 import { Module } from "@nestjs/common";
+import { RolesGuard } from "./guards/roles.guard";
+import { JwtAuthGuard } from "./guards/jwt-auth.guard";
 @Module({
     imports: [
         TypeOrmModule.forFeature([User]),
@@ -17,7 +19,7 @@ import { Module } from "@nestjs/common";
         }),
     ],
     controllers:[AuthController],
-    providers:[AuthService, LocalStrategy, JwtStrategy],
-    exports:[AuthService, JwtStrategy],
+    providers:[AuthService, LocalStrategy, JwtStrategy, RolesGuard, JwtAuthGuard],
+    exports:[AuthService, JwtStrategy, RolesGuard, JwtAuthGuard],
 })
 export class AuthModule {}

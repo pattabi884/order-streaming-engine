@@ -4,7 +4,7 @@ import { Repository } from "typeorm";
 import * as bcrypt from "bcrypt";
 import { User } from "../entities/user.entity";
 import { JwtService } from "@nestjs/jwt";
-import { RegisterInput } from "./dto/register.dto";
+import { RegisterDto } from "./dto/register.dto";
 
 
 @Injectable()
@@ -41,7 +41,7 @@ export class AuthService {
 
     }
 
-    async register(input: RegisterInput) {
+    async register(input: RegisterDto) {
         const { email, password, name, role } = input;
         const normalizedEmail = email.trim().toLowerCase();
 

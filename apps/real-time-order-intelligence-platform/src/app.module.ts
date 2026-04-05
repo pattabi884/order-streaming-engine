@@ -11,6 +11,7 @@ import { User } from './entities/user.entity';
 import { Agent } from './entities/agent.entity';
 import { Merchant } from './entities/merchant.entity';
 import { AuthModule } from './auth/auth.module';
+import { LocationModule } from './consumers/location/location.module';
 
 //import { OrdersModule } from './modules/orders/orders.module';
 //import { StateMachineModule } from './modules/state-machine/state-machine.module';
@@ -34,6 +35,7 @@ import { AuthModule } from './auth/auth.module';
     OrdersModule,
     StateMachineModule,
     AuthModule,
+    LocationModule
   ],
 })
 export class AppModule {}

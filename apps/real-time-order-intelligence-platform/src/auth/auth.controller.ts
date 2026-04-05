@@ -3,14 +3,14 @@ import { AuthService } from './auth.service';
 import { LocalAuthGuard } from './guards/local-auth.guard';
 import { JwtAuthGuard } from './guards/jwt-auth.guard';
 import { CurrentUser } from './decorators/current-user.decorator';
-import type { RegisterInput } from './dto/register.dto';
+import type { RegisterDto } from './dto/register.dto';
 
 @Controller('auth')
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
   @Post('register')
-  async register(@Body() body: RegisterInput) {
+  async register(@Body() body: RegisterDto) {
     return this.authService.register(body);
   }
 
