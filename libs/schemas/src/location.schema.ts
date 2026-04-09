@@ -1,8 +1,9 @@
 import { z } from 'zod';
-export const AgentStatusSchema = z.enum([
-    'AVAILABLE',
-    'BUSY',
-    'OFFLINE'
+import { AGENT_STATUS } from './agent.status.constants';
+const AgentStatusSchema = z.enum([
+  AGENT_STATUS.AVAILABLE,
+  AGENT_STATUS.ON_DELIVERY,
+  AGENT_STATUS.OFFLINE,
 ]);
 
 //kafka message contract for topic: order.location 

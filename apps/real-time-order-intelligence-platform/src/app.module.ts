@@ -12,10 +12,10 @@ import { Agent } from './entities/agent.entity';
 import { Merchant } from './entities/merchant.entity';
 import { AuthModule } from './auth/auth.module';
 import { LocationModule } from './consumers/location/location.module';
-
+import { ScheduleModule } from '@nestjs/schedule';
 //import { OrdersModule } from './modules/orders/orders.module';
 //import { StateMachineModule } from './modules/state-machine/state-machine.module';
-
+import { BullModule } from '@nestjs/bullmq';
 @Module({
   imports: [
     TypeOrmModule.forRoot({
@@ -28,14 +28,24 @@ import { LocationModule } from './consumers/location/location.module';
       entities: [Order, OrderStateHistory, User, Agent, Merchant],
       synchronize: false,
       logging: true,
+      
     }),
+
+    BullModule.forRoot({
+      connection: {
+        host: process.env.REDIS_HOST ?? '127.0.0.1',
+        port: Number(process.env.REDIS_PORT ?? 6379),
+      },
+    }),
+
 
     RedisModule,
     KafkaModule,
     OrdersModule,
     StateMachineModule,
     AuthModule,
-    LocationModule
+    LocationModule,
+    ScheduleModule.forRoot(),
   ],
 })
 export class AppModule {}

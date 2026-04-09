@@ -8,6 +8,7 @@ import { Repository } from "typeorm";
 import { OrderStateHistory } from "../../entities/order-state-history.entity";
 import { OrderCreatedSchema, OrderEventBaseSchema } from "@app/schemas/order.schema";
 import { ALLOWED_TRANSITIONS } from "./transitions";
+import { SlaSchedulerService } from "../../sla/sla.scheduler.service";
 
 
 
@@ -20,7 +21,8 @@ export class StateMachineConsumer implements OnModuleInit{
         private readonly redisService: RedisService,
         private readonly kafkaProducer: KafkaProducerService,
         @InjectRepository(Order) private readonly orderRepository: Repository<Order>,
-        @InjectRepository(OrderStateHistory) private readonly stateHistoryRepository: Repository<OrderStateHistory> 
+        @InjectRepository(OrderStateHistory) private readonly stateHistoryRepository: Repository<OrderStateHistory>,
+        private readonly slaSchedulerService: SlaSchedulerService,
     ){}
 
     async onModuleInit() {
@@ -150,8 +152,19 @@ export class StateMachineConsumer implements OnModuleInit{
             3600
         );
         if (eventType === 'CONFIRMED') {
-            //todo sechudel SLA jobs (BullMq later)
-        }
+  const orderForSla = await this.orderRepository.findOne({
+    where: { order_id: orderId },
+    select: ['order_id', 'estimated_delivery_minutes'],
+  });
+
+  if (orderForSla?.estimated_delivery_minutes) {
+    await this.slaSchedulerService.scheduleForConfirmed({
+      orderId,
+      estimatedDeliveryMinutes: orderForSla.estimated_delivery_minutes,
+    });
+  }
+}
+
 
         await this.commitOffset(topic, partition, message); 
         

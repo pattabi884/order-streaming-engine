@@ -1,6 +1,7 @@
 import { Injectable } from "@nestjs/common";
 import { RedisService } from "@app/redis";
 import { AgentLocationPing, AgentLocationPingSchema } from "@app/schemas";
+import { AGENT_STATUS } from "@app/schemas/agent.status.constants";
 
 type FindNearestInput = {
     lat: number;
@@ -43,17 +44,17 @@ export class LocationTrackingService {
         const radiusKm = input.radiusKm ?? 3;
         const maxCandidates = input.maxCandidates ?? 20;
 
-         const raw = await redis.georadius(
-            this.GEO_KEY,
-            input.lng,
-            input.lat,
-            radiusKm,
-            'km',
-            'WITHDIST',
-            'ASC',
-            'COUNT',
-            maxCandidates,
-    );
+         // nearest query pattern (ioredis-safe via CALL)
+const raw = (await redis.call(
+  'GEOSEARCH',
+  this.GEO_KEY,
+  'FROMLONLAT', input.lng, input.lat,
+  'BYRADIUS', radiusKm, 'km',
+  'WITHDIST',
+  'ASC',
+  'COUNT', maxCandidates,
+)) as Array<[string, string]>;
+
 
     if(!raw || raw.length === 0) return null;
 
@@ -76,7 +77,7 @@ export class LocationTrackingService {
       const alive = checks[i * 2]?.[1];
       const state = checks[i * 2 + 1]?.[1];
 
-      if (alive === '1' && state === 'AVAILABLE') {
+      if (alive === '1' && state === AGENT_STATUS.AVAILABLE) {
         return candidates[i]; // first match is nearest because ASC
       }
     }
